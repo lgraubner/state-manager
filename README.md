@@ -12,7 +12,7 @@ Javascript handling for mediaquery breakpoints.
 * Safari 5.1+
 * IE 10+
 
-For support of older browsers use: https://github.com/paulirish/matchMedia.js
+For support of older browsers use this polyfill: https://github.com/paulirish/matchMedia.js
 
 ## Usage
 

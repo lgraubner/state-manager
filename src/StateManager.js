@@ -102,7 +102,7 @@ var StateManager = (function(window, document, $, undefined) {
      * @param  {Array} states   Array of states
      */
     var constructor = function(states) {
-        if (!window.matchMediaa) return console.error("Function matchMedia not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
+        if (!window.matchMedia) return console.error("Function matchMedia not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
 
         $win = $(window);
 
