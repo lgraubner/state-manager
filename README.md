@@ -5,7 +5,7 @@ Javascript handling for mediaquery breakpoints.
 
 * jQuery
 
-## Support
+## Supported Browsers
 
 * Chrome 10+
 * Firefox 6+
