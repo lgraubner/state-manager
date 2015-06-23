@@ -1,9 +1,18 @@
 # StateManager
-Javascript handling for breakpoints.
+Javascript handling for mediaquery breakpoints.
 
 ## Dependencies
 
 * jQuery
+
+## Support
+
+* Chrome 10+
+* Firefox 6+
+* Safari 5.1+
+* IE 10+
+
+For support of older browsers use: https://github.com/paulirish/matchMedia.js
 
 ## Usage
 
@@ -20,7 +29,7 @@ Initialize with breakpoints:
 var sm = new StateManager([
     {
         name: "mobile",
-        maxWidth: 768,
+        mq: "(max-width: 768px)",
         match: function() {
 
         },
@@ -30,7 +39,7 @@ var sm = new StateManager([
     },
     {
         name: "desktop",
-        minWidth: 769,
+        mq: "(min-width: 769px)",
         match: function() {
 
         },
@@ -47,8 +56,7 @@ Add Breakpoints after initialization:
 sm.addState({
     {
         name: "tablet",
-        minWidth: 768,
-        maxWidth: 990,
+        mq: "(min-width: 768px) and (max-width: 990px)",
         match: function() {
 
         },
