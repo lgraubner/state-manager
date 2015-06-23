@@ -2,7 +2,7 @@
  * Handles browser states depending on it's width.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 1.1.0
+ * @version 1.1.1
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -113,11 +113,13 @@ var StateManager = (function(window, document, $, undefined) {
     var constructor = function(states) {
         $win = $(window);
 
-        $.each(states, function(key, state) {
-            addState(state);
-        });
+        if (states) {
+            $.each(states, function(key, state) {
+                addState(state);
+            });
 
-        _triggerStates();
+            _triggerStates();
+        }
 
         $win.on("resize.sm", _debounce(_triggerStates, 100));
     };
