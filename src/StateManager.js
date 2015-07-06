@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 2.0.1
+ * @version 2.0.2
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -123,6 +123,6 @@ var StateManager = (function(window, document, $, undefined) {
         destroy: destroy
     };
 
-    return constructor;
+    return Plugin;
 
 })(this, document, jQuery);
