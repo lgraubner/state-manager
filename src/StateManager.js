@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 2.0.0
+ * @version 2.0.1
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -101,7 +101,7 @@ var StateManager = (function(window, document, $, undefined) {
      *
      * @param  {Array} states   Array of states
      */
-    var constructor = function(states) {
+    var Plugin = function(states) {
         if (!window.matchMedia) return console.error("Function matchMedia not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
 
         $win = $(window);
@@ -117,7 +117,7 @@ var StateManager = (function(window, document, $, undefined) {
         $win.on("resize.sm", _debounce(_triggerStates, 100));
     };
 
-    constructor.prototype = {
+    Plugin.prototype = {
         addState: addState,
         matchState: matchState,
         destroy: destroy
