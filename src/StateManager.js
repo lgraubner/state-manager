@@ -2,15 +2,18 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 2.0.2
+ * @version 2.0.3
  */
 
 var StateManager = (function(window, document, $, undefined) {
     "use strict";
 
-    var _states = [],
-        _activeStates = [],
-        $win, removeItem, match, inArray;
+    var _states = [];
+    var _activeStates = [];
+    var $win;
+    var removeItem;
+    var match;
+    var inArray;
 
     /**
      * Debounce function to delay function calls.
@@ -22,7 +25,8 @@ var StateManager = (function(window, document, $, undefined) {
     var _debounce = function(func, wait, immediate) {
         var timeout;
         return function() {
-            var context = this, args = arguments;
+            var context = this;
+            var args = arguments;
             var later = function() {
                 timeout = null;
                 if (!immediate) func.apply(context, args);
