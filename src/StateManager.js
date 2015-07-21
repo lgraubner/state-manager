@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 2.1.0
+ * @version 2.1.1
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -50,10 +50,10 @@ var StateManager = (function(window, document, $, undefined) {
                 if (state.match) {
                     if ($.isArray(state.match)) {
                         $.each(state.match, function() {
-                            this.call(window);
+                            this.call();
                         });
                     } else {
-                        state.match.call(window);
+                        state.match.call();
                     }
                 }
 
@@ -62,10 +62,10 @@ var StateManager = (function(window, document, $, undefined) {
                 if (state.unmatch) {
                     if ($.isArray(state.unmatch)) {
                         $.each(state.unmatch, function() {
-                            this.call(window);
+                            this.call();
                         });
                     } else {
-                        state.unmatch.call(window);
+                        state.unmatch.call();
                     }
                 }
 
