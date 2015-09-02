@@ -17,7 +17,7 @@ StateManager relies on `window.matchMedia` for mediaquery checks which is suppor
 * Safari 5.1+
 * IE 10+
 
-To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.js) is included in the minified version.
+To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.js) is included in the minified `StateManager-polyfill.min.js` version.
 
 ## Usage
 

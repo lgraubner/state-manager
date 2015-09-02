@@ -19,12 +19,20 @@ var banner = ["/**",
 ""].join("\n");
 
 gulp.task("build", function() {
-    return gulp.src(["src/matchMedia.js", "src/" + pluginName + ".js"])
+
+    gulp.src(["src/matchMedia.js", "src/" + pluginName + ".js"])
+        .pipe(concat(pluginName + "-polyfill.min.js"))
+        .pipe(uglify())
+        .pipe(header(banner, { pkg: pkg }))
+        .pipe(gulp.dest("dist/"));
+
+    return gulp.src("src/" + pluginName + ".js")
         .pipe(concat(pluginName + ".min.js"))
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg }))
         .pipe(size({ gzip: true }))
         .pipe(gulp.dest("dist/"));
+
 });
 
 gulp.task("lint", function() {
