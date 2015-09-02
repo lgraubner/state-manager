@@ -1,6 +1,6 @@
 {
   "name": "StateManager",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": "Javascript handling for mediaquery breakpoints.",
   "author": "Lars Graubner <mail@larsgraubner.de>",
   "homepage": "https://github.com/lgraubner/state-manager",
@@ -16,13 +16,13 @@
     "jquery": ">=1.9.0"
   },
   "devDependencies": {
-    "gulp": "~3.9.0",
-    "gulp-uglify": "~1.2.0",
-    "gulp-header": "~1.2.2",
-    "gulp-rename": "~1.2.2",
-    "gulp-strip-debug": "~1.0.2",
-    "gulp-jshint": "~1.11.2",
-    "jshint-stylish": "~2.0.1"
+    "gulp": "^3.9.0",
+    "gulp-uglify": "^1.4.0",
+    "gulp-header": "^1.7.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-strip-debug": "^1.0.2",
+    "gulp-jshint": "^1.11.2",
+    "jshint-stylish": "^2.0.1"
   },
   "license": "MIT"
 }

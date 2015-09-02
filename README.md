@@ -1,21 +1,33 @@
 # StateManager
-Javascript handling for mediaquery breakpoints.
+
+> Javascript handling for mediaquery breakpoints.
+
+The StateManager plugin handles mediaqueries and executes javascript on match/unmatch. This plugin is inspired by enquire.js, but cut down on basic functionality and slightly different handling of callbacks (e.g. executing callback on register if mediaquery matches).
 
 ## Dependencies
 
-* jQuery
+The only dependency is jQuery, which is used for some useful helper functions.
 
 ## Supported Browsers
+
+StateManager relies on `window.matchMedia` for mediaquery checks. Therefore support is limited to the following browsers:
 
 * Chrome 10+
 * Firefox 6+
 * Safari 5.1+
 * IE 10+
 
-For support of older browsers use this polyfill: https://github.com/paulirish/matchMedia.js
+To support legacy browsers use this polyfill: https://github.com/paulirish/matchMedia.js
 
 ## Usage
 
+Include `StateManager.min.js` before the closing `body` tag.
+
+```HTML
+<script src="/path/to/StateManager.min.js"></script>
+```
+
+### Basic
 
 Initialize:
 
@@ -23,52 +35,54 @@ Initialize:
 var sm = new StateManager();
 ```
 
-Initialize with breakpoints:
+Add states:
 
 ```JavaScript
-var sm = new StateManager([
-    {
-        name: "mobile",
-        mq: "(max-width: 768px)",
-        match: function() {
-
-        },
-        unmatch: function() {
-
-        }
-    },
-    {
-        name: "desktop",
-        mq: "(min-width: 769px)",
-        match: function() {
-
-        },
-        unmatch: function() {
-
-        }
-    }
-]);
+var handler = sm.register("screen and (max-width: 768px)", function() {
+    // fires once if device viewport matches
+});
 ```
 
-Add Breakpoints after initialization:
+remove states:
 
 ```JavaScript
-sm.addState({
-    {
-        name: "tablet",
-        mq: "(min-width: 768px) and (max-width: 990px)",
-        match: function() {
+sm.deregister(handler);
+```
 
-        },
-        unmatch: function() {
+### Advanced
 
-        }
+If your callback function depends on a specific context pass it on initialization:
+
+```JavaScript
+var context = {
+    ...
+
+    foo: function() {
+
+    }
+}
+
+var sm = new StateManager(context);
+```
+
+To register callbacks for unmatching mediaqueries use the following declaration:
+
+```JavaScript
+var handler = sm.register("screen and (max-width: 768px)", {
+    match: function() {
+        // fires once if mediaquery matches
+    },
+    unmatch: function() {
+        // fires once if mediaquery does not match anymore
     }
 });
 ```
 
-### API
+In some cases you might need multiple callback functions. Therefore register an array of functions:
 
-* addState
-* matchState
-* destroy
+```JavaScript
+var handler = sm.register("screen and (max-width: 768px)", {
+    match: [func1() { ... }, func2() { ... }],
+    unmatch: [func3() { ... }, func4() { ... }]
+});
+```

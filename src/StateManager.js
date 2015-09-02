@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 2.1.1
+ * @version 3.0.0
  */
 
 var StateManager = (function(window, document, $, undefined) {
@@ -10,10 +10,8 @@ var StateManager = (function(window, document, $, undefined) {
 
     var _states = [];
     var _activeStates = [];
+    var _context;
     var $win;
-    var removeItem;
-    var match;
-    var inArray;
 
     /**
      * Debounce function to delay function calls.
@@ -39,72 +37,121 @@ var StateManager = (function(window, document, $, undefined) {
     };
 
     /**
-     * Triggers all matching states.
+     * Generates a random five character key
+     *
+     * @return {String} key
      */
-    var _triggerStates = function() {
-        $.each(_states, function(key, state) {
-            match = _match(state);
-            inArray = matchState(state.name);
+    var _generateKey = function() {
+        var key = "";
+        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        var i;
 
-            if (!inArray && match) {
-                if (state.match) {
-                    if ($.isArray(state.match)) {
-                        $.each(state.match, function() {
-                            this.call();
-                        });
-                    } else {
-                        state.match.call();
-                    }
-                }
+        for(i = 0; i < 5; i++) {
+            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
 
-                _activeStates.push(state.name);
-            } else if (inArray && !match) {
-                if (state.unmatch) {
-                    if ($.isArray(state.unmatch)) {
-                        $.each(state.unmatch, function() {
-                            this.call();
-                        });
-                    } else {
-                        state.unmatch.call();
-                    }
-                }
-
-                removeItem = state.name;
-                _activeStates = $.grep(_activeStates, function(val) {
-                    return val != removeItem;
-                });
-            }
-        });
+        return key;
     };
 
     /**
-     * Checks if given state matches.
-     *
-     * @param  {Object} state   state object
-     * @return {boolean}        matches
+     * Triggers a single state.
      */
-    var _match = function(state) {
-        return window.matchMedia(state.mq).matches;
+    var _triggerState = function(state) {
+        var mq = state.mq;
+        var handler = state.handler;
+
+        var matches = _matches(mq);
+        var active = _isActive(state);
+
+        if (!active && matches) {
+            if ($.isFunction(handler)) {
+                handler.apply(_context);
+            }
+
+            if ($.isFunction(handler.match)) {
+                handler.match.apply(_context);
+            }
+
+            if ($.isArray(handler.match)) {
+                $.each(handler.match, function() {
+                    this.apply(_context);
+                });
+            }
+
+            _activeStates.push(state.key);
+        } else if (active && !matches) {
+            if ($.isFunction(handler.unmatch)) {
+                handler.unmatch.apply(_context);
+            }
+
+            if ($.isArray(handler.unmatch)) {
+                $.each(handler.unmatch, function() {
+                    this.apply(_context);
+                });
+            }
+
+            _activeStates = $.grep(_activeStates, function(val) {
+                return val != state.key;
+            });
+        }
+    };
+
+    /**
+     * Triggers all matching states.
+     */
+    var _triggerAllStates = function() {
+        $.each(_states, function(key, state) {
+            _triggerState(state);
+        });
     };
 
     /**
      * Checks if a state is currently active.
      *
-     * @param  {string} stateName   name of the state
-     * @return {boolean}            matches
+     * @param  {Object}  state  state object
+     * @return {boolean}        match result
      */
-    var matchState = function(stateName) {
-        return $.inArray(stateName, _activeStates) === -1 ? false : true;
+    var _isActive = function(state) {
+        return $.inArray(state.key, _activeStates) === -1 ? false : true;
     };
 
     /**
-     * Adds state object to check for matches.
+     * Checks if given state matches.
      *
-     * @param  {Object} state state object
+     * @param  {String} mq      media query
+     * @return {boolean}        matches
      */
-    var addState = function(state) {
-        _states.push(state);
-        _triggerStates();
+    var _matches = function(mq) {
+        return window.matchMedia(mq).matches;
+    };
+
+    /**
+     * Adds a state object to check for matches.
+     *
+     * @param  {Object} state   state object
+     * @param  {mixed}  handler object or function with callbacks
+     */
+    var register = function(state, handler) {
+        var stateObj = {
+            key: _generateKey(),
+            mq: state,
+            handler: handler
+        };
+
+        _states.push(stateObj);
+        _triggerState(stateObj);
+
+        return stateObj;
+    };
+
+    var deregister = function(state) {
+        _activeStates = $.grep(_activeStates, function(val) {
+            return val != state.key;
+        });
+
+        _states = $.grep(_states, function(val) {
+            return val.key != state.key;
+        });
     };
 
     /**
@@ -119,27 +166,22 @@ var StateManager = (function(window, document, $, undefined) {
     /**
      * Constructor for new StateManager instances.
      *
-     * @param  {Array} states   Array of states
+     * @param  {Object} context   context to execute callbacks in
      */
-    var Plugin = function(states) {
-        if (!window.matchMedia) return console.error("Function matchMedia not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
-
-        $win = $(window);
-
-        if (states) {
-            $.each(states, function(key, state) {
-                addState(state);
-            });
-
-            _triggerStates();
+    var Plugin = function(context) {
+        if (!window.matchMedia) {
+            throw new Error("matchMedia is not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
         }
 
-        $win.on("resize.sm", _debounce(_triggerStates, 100));
+        _context = context || this;
+        $win = $(window);
+
+        $win.on("resize.sm", _debounce(_triggerAllStates, 100));
     };
 
     Plugin.prototype = {
-        addState: addState,
-        matchState: matchState,
+        register: register,
+        deregister: deregister,
         destroy: destroy
     };
 
