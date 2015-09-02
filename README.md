@@ -10,14 +10,14 @@ The only dependency is jQuery, which is used for some useful helper functions.
 
 ## Supported Browsers
 
-StateManager relies on `window.matchMedia` for mediaquery checks. Therefore support is limited to the following browsers:
+StateManager relies on `window.matchMedia` for mediaquery checks which is supported by the following browsers:
 
 * Chrome 10+
 * Firefox 6+
 * Safari 5.1+
 * IE 10+
 
-To support legacy browsers use this polyfill: https://github.com/paulirish/matchMedia.js
+To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.js) is included in the minified version.
 
 ## Usage
 

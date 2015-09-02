@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 3.0.0
+ * @version 3.1.0
  */
 
 var StateManager = (function(window, document, $, undefined) {
