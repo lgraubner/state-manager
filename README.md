@@ -6,7 +6,7 @@ The StateManager plugin handles mediaqueries and executes javascript on match/un
 
 ## Dependencies
 
-The only dependency is jQuery, which is used for some useful helper functions.
+None.
 
 ## Supported Browsers
 

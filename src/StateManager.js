@@ -2,165 +2,125 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 3.1.0
+ * @version 3.2.0
  */
 
-var StateManager = (function(window, document, $, undefined) {
+var StateManager = (function(window, document, undefined) {
     "use strict";
 
-    var _states = [];
-    var _activeStates = [];
-    var _context;
-    var $win;
+    /**
+     * Helper function to iterate over an array.
+     *
+     * @param  {Array}    arr array to iterate over
+     * @param  {Function} fn  callback function
+     */
+    function each(arr, fn) {
+        var i;
+        for (i = 0; i < arr.length; i++) {
+            fn(arr[i], i);
+        }
+    }
 
     /**
-     * Debounce function to delay function calls.
+     * Helper function to check if object is an array.
      *
-     * @param  {Function} func      function to call
-     * @param  {number} wait        delay in milliseconds
-     * @param  {boolean} immediate
+     * @param  {Object}  obj object to check
+     * @return {Boolean}
      */
-    var _debounce = function(func, wait, immediate) {
-        var timeout;
-        return function() {
-            var context = this;
-            var args = arguments;
-            var later = function() {
-                timeout = null;
-                if (!immediate) func.apply(context, args);
-            };
-            var callNow = immediate && !timeout;
-            clearTimeout(timeout);
-            timeout = setTimeout(later, wait);
-            if (callNow) func.apply(context, args);
+    function isArray(obj) {
+        return Object.prototype.toString.call(obj) === "[object Array]";
+    }
+
+    /**
+     * Helper function to check if object is a function.
+     *
+     * @param  {Object}  obj object to check
+     * @return {Boolean}
+     */
+    function isFunction(obj) {
+        return !!(obj && obj.constructor && obj.call && obj.apply);
+    }
+
+    /**
+     * Object representing a mediaquery.
+     *
+     * @param  {string} mq      plain mediaquery string
+     * @param  {Object} handler callbacks to execute
+     * @param  {Object} context context for the callbacks
+     */
+    var MediaQuery = function(mq, handler, context) {
+        this.mq = mq;
+        this.handler = handler;
+        this.context = context;
+
+        var self = this;
+
+        this.matchMedia = window.matchMedia(mq);
+
+        this.listenerFunction = function(mql) {
+            if (mql.matches) {
+                self.matchCallback();
+            } else {
+                self.unmatchCallback();
+            }
         };
+        this.matchMedia.addListener(this.listenerFunction);
+
+        if (this.matchMedia.matches) {
+            this.matchCallback();
+        }
     };
 
     /**
-     * Generates a random five character key
-     *
-     * @return {String} key
+     * Executes callbacks if mediaquery matches.
      */
-    var _generateKey = function() {
-        var key = "";
-        var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        var i;
+    MediaQuery.prototype.matchCallback = function() {
+        var handler = this.handler;
+        var self = this;
 
-        for(i = 0; i < 5; i++) {
-            key += chars.charAt(Math.floor(Math.random() * chars.length));
+        if (isFunction(handler)) {
+            handler.apply(this.context);
+        } else {
+
+            if (isFunction(handler.match)) {
+                handler.match.apply(this.context);
+            }
+
+            if (isArray(handler.match)) {
+                each(handler.match, function(func) {
+                    func.apply(self.context);
+                });
+            }
+        }
+    };
+
+    /**
+     * Executes callbacks if mediaquery does not match anymore.
+     */
+    MediaQuery.prototype.unmatchCallback = function() {
+        var handler = this.handler;
+        var self = this;
+
+        if (isFunction(handler.unmatch)) {
+            handler.unmatch.apply(this.context);
         }
 
-        return key;
-    };
-
-    /**
-     * Triggers a single state.
-     */
-    var _triggerState = function(state) {
-        var mq = state.mq;
-        var handler = state.handler;
-
-        var matches = _matches(mq);
-        var active = _isActive(state);
-
-        if (!active && matches) {
-            if ($.isFunction(handler)) {
-                handler.apply(_context);
-            }
-
-            if ($.isFunction(handler.match)) {
-                handler.match.apply(_context);
-            }
-
-            if ($.isArray(handler.match)) {
-                $.each(handler.match, function() {
-                    this.apply(_context);
-                });
-            }
-
-            _activeStates.push(state.key);
-        } else if (active && !matches) {
-            if ($.isFunction(handler.unmatch)) {
-                handler.unmatch.apply(_context);
-            }
-
-            if ($.isArray(handler.unmatch)) {
-                $.each(handler.unmatch, function() {
-                    this.apply(_context);
-                });
-            }
-
-            _activeStates = $.grep(_activeStates, function(val) {
-                return val != state.key;
+        if (isArray(handler.match)) {
+            each(handler.unmatch, function(func) {
+                func.apply(self.context);
             });
         }
     };
 
     /**
-     * Triggers all matching states.
+     * Destroys MediaQuery object and removes listener.
      */
-    var _triggerAllStates = function() {
-        $.each(_states, function(key, state) {
-            _triggerState(state);
-        });
-    };
-
-    /**
-     * Checks if a state is currently active.
-     *
-     * @param  {Object}  state  state object
-     * @return {boolean}        match result
-     */
-    var _isActive = function(state) {
-        return $.inArray(state.key, _activeStates) === -1 ? false : true;
-    };
-
-    /**
-     * Checks if given state matches.
-     *
-     * @param  {String} mq      media query
-     * @return {boolean}        matches
-     */
-    var _matches = function(mq) {
-        return window.matchMedia(mq).matches;
-    };
-
-    /**
-     * Adds a state object to check for matches.
-     *
-     * @param  {Object} state   state object
-     * @param  {mixed}  handler object or function with callbacks
-     */
-    var register = function(state, handler) {
-        var stateObj = {
-            key: _generateKey(),
-            mq: state,
-            handler: handler
-        };
-
-        _states.push(stateObj);
-        _triggerState(stateObj);
-
-        return stateObj;
-    };
-
-    var deregister = function(state) {
-        _activeStates = $.grep(_activeStates, function(val) {
-            return val != state.key;
-        });
-
-        _states = $.grep(_states, function(val) {
-            return val.key != state.key;
-        });
-    };
-
-    /**
-     * Destroys the StateManager and removes all States and EventListeners.
-     */
-    var destroy = function() {
-        $win.off("resize.sm");
-        _states = [];
-        _activeStates = [];
+    MediaQuery.prototype.destroy = function() {
+        this.matchMedia.removeListener(this.listenerFunction);
+        this.matchMedia = undefined;
+        this.context = undefined;
+        this.mq = undefined;
+        this.handler = undefined;
     };
 
     /**
@@ -168,23 +128,56 @@ var StateManager = (function(window, document, $, undefined) {
      *
      * @param  {Object} context   context to execute callbacks in
      */
-    var Plugin = function(context) {
+    var QueryHandler = function(context) {
         if (!window.matchMedia) {
             throw new Error("matchMedia is not supported. Please visit: https://github.com/lgraubner/state-manager#supported-browsers");
         }
 
-        _context = context || this;
-        $win = $(window);
-
-        $win.on("resize.sm", _debounce(_triggerAllStates, 100));
+        this.queries = [];
+        this.context = context || window;
     };
 
-    Plugin.prototype = {
-        register: register,
-        deregister: deregister,
-        destroy: destroy
+    /**
+     * Creates new MediaQuery object.
+     *
+     * @param  {String} mq      plain mediaquery
+     * @param  {Object} handler callback functions
+     * @return {MediaQuery}     MediaQuery object
+     */
+    QueryHandler.prototype.register = function(mq, handler) {
+        var query = new MediaQuery(mq, handler, this.context);
+        this.queries.push(query);
+        return query;
     };
 
-    return Plugin;
+    /**
+     * Deletes MediaQuery object.
+     * @param  {[type]} MediaQuery MediaQuery object
+     */
+    QueryHandler.prototype.deregister = function(MediaQuery) {
+        MediaQuery.destroy();
 
-})(this, document, jQuery);
+        var queries = [];
+        each(this.queries, function(mq) {
+            if (mq !== MediaQuery) {
+                queries.push(mq);
+            }
+        });
+        this.queries = queries;
+    };
+
+    /**
+     * Destroys the StateManager and removes all MediaQuery objects and listeners.
+     */
+    QueryHandler.prototype.destroy = function() {
+        var self = this;
+        each(this.queries, function(mq) {
+            self.deregister(mq);
+        });
+
+        this.context = undefined;
+    };
+
+    return QueryHandler;
+
+})(this, document);
