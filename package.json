@@ -1,8 +1,12 @@
 {
   "name": "StateManager",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Javascript handling for mediaquery breakpoints.",
-  "author": "Lars Graubner <mail@larsgraubner.de>",
+  "author": {
+      "name": "Lars Graubner",
+      "email": "mail@larsgraubner.de",
+      "url": "http://larsgraubner.de"
+  },
   "homepage": "https://github.com/lgraubner/state-manager",
   "main": "dist/StateManager.min.js",
   "repository": {
@@ -17,11 +21,11 @@
   },
   "devDependencies": {
     "gulp": "^3.9.0",
-    "gulp-uglify": "^1.4.0",
+    "gulp-uglify": "^1.4.2",
     "gulp-header": "^1.7.1",
     "gulp-jshint": "^1.11.2",
-    "gulp-size": "^2.0.0",
-    "gulp-concat": "2.6.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-rename": "^1.2.2",
     "jshint-stylish": "^2.0.1"
   },
   "license": "MIT"

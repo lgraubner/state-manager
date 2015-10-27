@@ -3,18 +3,15 @@ var uglify = require("gulp-uglify");
 var header = require("gulp-header");
 var concat = require("gulp-concat");
 var jshint = require("gulp-jshint");
-var size = require("gulp-size");
+var rename = require("gulp-rename");
 var pkg = require("./package.json");
 
 var pluginName = pkg.name.replace(/-/g, ".");
 
 var banner = ["/**",
-    " * <%= pkg.name %> - v<%= pkg.version %>",
-    " * <%= pkg.description %>",
-    " * <%= pkg.homepage %>",
-    " *",
-    " * Copyright <%= pkg.author %>",
-    " * Under <%= pkg.license %> License",
+    " * <%= pkg.name %> v<%= pkg.version %> - <%= pkg.description %>",
+    " * Copyright " + new Date().getFullYear() + " <%= pkg.author.name %> - <%= pkg.homepage %>",
+    " * License: <%= pkg.license %>",
     " */",
 ""].join("\n");
 
@@ -27,10 +24,9 @@ gulp.task("build", function() {
         .pipe(gulp.dest("dist/"));
 
     return gulp.src("src/" + pluginName + ".js")
-        .pipe(concat(pluginName + ".min.js"))
+        .pipe(rename({ suffix: ".min" }))
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg }))
-        .pipe(size({ gzip: true }))
         .pipe(gulp.dest("dist/"));
 
 });
