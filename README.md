@@ -1,5 +1,7 @@
 # StateManager
 
+[![David Dev](https://img.shields.io/david/dev/lgraubner/state-manager.svg)](https://david-dm.org/lgraubner/state-manager#info=devDependencies)
+
 > Javascript handling for mediaquery breakpoints.
 
 The StateManager plugin handles mediaqueries and executes javascript on match/unmatch. This plugin is inspired by enquire.js, but cut down on basic functionality and slightly different handling of callbacks (e.g. executing callback on register if mediaquery matches).
