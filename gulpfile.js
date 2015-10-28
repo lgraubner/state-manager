@@ -4,6 +4,8 @@ var header = require("gulp-header");
 var concat = require("gulp-concat");
 var jshint = require("gulp-jshint");
 var rename = require("gulp-rename");
+var mochaPhantomjs = require("gulp-mocha-phantomjs");
+var runSequence = require("run-sequence");
 var pkg = require("./package.json");
 
 var pluginName = pkg.name.replace(/-/g, ".");
@@ -15,7 +17,7 @@ var banner = ["/**",
     " */",
 ""].join("\n");
 
-gulp.task("build", function() {
+gulp.task("js", function() {
 
     gulp.src(["src/matchMedia.js", "src/" + pluginName + ".js"])
         .pipe(concat(pluginName + "-polyfill.min.js"))
@@ -32,9 +34,20 @@ gulp.task("build", function() {
 });
 
 gulp.task("lint", function() {
-    return gulp.src("src/*.js")
+    return gulp.src("src/StateManager.js")
         .pipe(jshint())
         .pipe(jshint.reporter("jshint-stylish"));
 });
 
-gulp.task("default", ["lint", "build"]);
+gulp.task("test", function() {
+    return gulp.src("test/runner.html")
+        .pipe(mochaPhantomjs({
+            reporter: "spec"
+        }));
+});
+
+gulp.task("build", function(callback) {
+    runSequence(["lint", "test"], ["js"], callback);
+});
+
+gulp.task("default", ["build"]);
