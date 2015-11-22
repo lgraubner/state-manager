@@ -3,9 +3,9 @@
   "version": "3.2.1",
   "description": "Javascript handling for mediaquery breakpoints.",
   "author": {
-      "name": "Lars Graubner",
-      "email": "mail@larsgraubner.de",
-      "url": "http://larsgraubner.de"
+    "name": "Lars Graubner",
+    "email": "mail@larsgraubner.de",
+    "url": "http://larsgraubner.de"
   },
   "homepage": "https://github.com/lgraubner/state-manager",
   "main": "dist/StateManager.min.js",
@@ -14,26 +14,27 @@
     "url": "https://github.com/lgraubner/state-manager.git"
   },
   "bugs": {
-      "url": "https://github.com/lgraubner/state-manager/issues"
+    "url": "https://github.com/lgraubner/state-manager/issues"
   },
   "dependencies": {
     "jquery": ">=1.9.0"
   },
   "devDependencies": {
+    "chai": "^3.4.1",
     "gulp": "^3.9.0",
-    "gulp-uglify": "^1.4.2",
-    "gulp-header": "^1.7.1",
-    "gulp-jshint": "^1.11.2",
     "gulp-concat": "^2.6.0",
+    "gulp-header": "^1.7.1",
+    "gulp-jshint": "^2.0.0",
+    "gulp-mocha-phantomjs": "^0.10.1",
     "gulp-rename": "^1.2.2",
-    "jshint-stylish": "^2.0.1",
-    "run-sequence": "^1.1.4",
-    "mocha": "^2.3.3",
-    "chai": "^3.4.0",
-    "gulp-mocha-phantomjs": "^0.10.1"
+    "gulp-uglify": "^1.5.1",
+    "jshint": "^2.9.1-rc1",
+    "jshint-stylish": "^2.1.0",
+    "mocha": "^2.3.4",
+    "run-sequence": "^1.1.5"
   },
   "license": "MIT",
   "scripts": {
-      "test": "gulp test"
+    "test": "gulp test"
   }
 }
