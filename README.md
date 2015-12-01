@@ -84,3 +84,11 @@ var handler = sm.register("screen and (max-width: 768px)", [
     function() { ... }
 ]);
 ```
+
+You can also check for states beside the handlers. Each handler exposes a `matches` property which is `true` or `false`, depending of the mediaquery.
+
+```JavaScript
+var mobile = sm.register("screen and (max-width: 768px)"); // handlers are optional
+
+console.log(mobile.matches); // true/false
+```
