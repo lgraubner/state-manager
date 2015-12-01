@@ -1,6 +1,6 @@
 {
   "name": "StateManager",
-  "version": "3.2.1",
+  "version": "4.0.0",
   "description": "Javascript handling for mediaquery breakpoints.",
   "author": {
     "name": "Lars Graubner",
@@ -8,6 +8,14 @@
     "url": "http://larsgraubner.de"
   },
   "homepage": "https://github.com/lgraubner/state-manager",
+  "keywords": [
+    "state",
+    "manager",
+    "state-manager",
+    "media",
+    "mediaquery",
+    "browser"
+  ],
   "main": "dist/StateManager.min.js",
   "repository": {
     "type": "git",

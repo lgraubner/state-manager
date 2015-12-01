@@ -70,21 +70,17 @@ var sm = new StateManager(context);
 To register callbacks for unmatching mediaqueries use the following declaration:
 
 ```JavaScript
-var handler = sm.register("screen and (max-width: 768px)", {
-    match: function() {
-        // fires once if mediaquery matches
-    },
-    unmatch: function() {
-        // fires once if mediaquery does not match anymore
-    }
-});
+var handler = sm.register("screen and (max-width: 768px)", function matchHandler() { ... }, function unmatchHandler() { ... });
 ```
 
-In some cases you might need multiple callback functions. Therefore register an array of functions:
+In some cases you might need multiple callback functions. Therefore register arrays of functions:
 
 ```JavaScript
-var handler = sm.register("screen and (max-width: 768px)", {
-    match: [func1() { ... }, func2() { ... }],
-    unmatch: [func3() { ... }, func4() { ... }]
-});
+var handler = sm.register("screen and (max-width: 768px)", [
+    function() { ... },
+    function() { ... }
+],
+[
+    function() { ... }
+]);
 ```

@@ -46,8 +46,8 @@ gulp.task("test", function() {
         }));
 });
 
-gulp.task("build", function(callback) {
-    runSequence(["lint", "test"], ["js"], callback);
-});
+gulp.task("build", ["js"]);
 
-gulp.task("default", ["build"]);
+gulp.task("default", function(callback) {
+    runSequence(["lint"], ["js"], ["test"], callback);
+});

@@ -6,10 +6,12 @@ describe("StateManager", function() {
 
     describe("QueryHandler", function() {
 
-        it("should have a context", function() {
-            sm = new StateManager();
-            expect(sm.context).to.be.not.empty;
-            sm.destroy();
+        describe("Object", function() {
+            it("should have a context", function() {
+                sm = new StateManager();
+                expect(sm.context).to.be.not.empty;
+                sm.destroy();
+            });
         });
 
         describe("#register", function() {
@@ -83,35 +85,47 @@ describe("StateManager", function() {
 
         before(function() {
             sm = new StateManager();
-            query = sm.register("screen and (max-width: 768px)", noop);
+            query = sm.register("screen and (max-width: 768px)", noop, noop);
         });
 
         after(function() {
             sm.destroy();
         });
 
-        it("should inherit context", function() {
-            expect(query.context).to.exist;
-            expect(query.context).to.equal(sm.context);
-        });
+        describe("Object", function() {
+            it("should inherit context", function() {
+                expect(query.context).to.exist;
+                expect(query.context).to.equal(sm.context);
+            });
 
-        it("should have a given handler", function() {
-            expect(query.handler).to.exist;
-            expect(query.handler).to.equal(noop);
-        });
+            it("should have a given match handler", function() {
+                expect(query.handler.match).to.exist;
+                expect(query.handler.match).to.equal(noop);
+            });
 
-        it("should have a listener function", function() {
-            expect(query.listenerFunction).to.exist;
-            expect(query.listenerFunction).to.be.a("function");
-        });
+            it("should have a given unmatch handler", function() {
+                expect(query.handler.unmatch).to.exist;
+                expect(query.handler.unmatch).to.equal(noop);
+            });
 
-        it("should have a matchMedia instance", function() {
-            expect(query.matchMedia).to.exist;
-        });
+            it("should have a listener function", function() {
+                expect(query.listenerFunction).to.exist;
+                expect(query.listenerFunction).to.be.a("function");
+            });
 
-        it("should have a mediquery string", function() {
-            expect(query.mq).to.exist;
-            expect(query.mq).to.be.a("string");
+            it("should have a matchMedia instance", function() {
+                expect(query.matchMedia).to.exist;
+            });
+
+            it("should have a mediaquery string", function() {
+                expect(query.mq).to.exist;
+                expect(query.mq).to.be.a("string");
+            });
+
+            it("should return a boolean", function() {
+                expect(query.matches).to.exist;
+                expect(query.matches).to.be.a("boolean");
+            });
         });
     });
 });

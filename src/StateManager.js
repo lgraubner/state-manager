@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 3.2.1
+ * @version 4.0.0
  */
 
 var StateManager = (function(window, document, undefined) {
@@ -56,6 +56,7 @@ var StateManager = (function(window, document, undefined) {
         var self = this;
 
         this.matchMedia = window.matchMedia(mq);
+        this.matches = this.matchMedia.matches;
 
         this.listenerFunction = function(mql) {
             if (mql.matches) {
@@ -66,7 +67,7 @@ var StateManager = (function(window, document, undefined) {
         };
         this.matchMedia.addListener(this.listenerFunction);
 
-        if (this.matchMedia.matches) {
+        if (this.matches) {
             this.matchCallback();
         }
     };
@@ -78,19 +79,16 @@ var StateManager = (function(window, document, undefined) {
         var handler = this.handler;
         var self = this;
 
-        if (isFunction(handler)) {
-            handler.apply(this.context);
-        } else {
+        if (isFunction(handler.match)) {
+            handler.match.apply(this.context);
+        }
 
-            if (isFunction(handler.match)) {
-                handler.match.apply(this.context);
-            }
-
-            if (isArray(handler.match)) {
-                each(handler.match, function(func) {
+        if (isArray(handler.match)) {
+            each(handler.match, function(func) {
+                if (isFunction(func)) {
                     func.apply(self.context);
-                });
-            }
+                }
+            });
         }
     };
 
@@ -105,9 +103,11 @@ var StateManager = (function(window, document, undefined) {
             handler.unmatch.apply(this.context);
         }
 
-        if (isArray(handler.match)) {
+        if (isArray(handler.unmatch)) {
             each(handler.unmatch, function(func) {
-                func.apply(self.context);
+                if (isFunction(func)) {
+                    func.apply(self.context);
+                }
             });
         }
     };
@@ -118,6 +118,7 @@ var StateManager = (function(window, document, undefined) {
     MediaQuery.prototype.destroy = function() {
         this.matchMedia.removeListener(this.listenerFunction);
         this.matchMedia = undefined;
+        this.matches = undefined;
         this.context = undefined;
         this.mq = undefined;
         this.handler = undefined;
@@ -144,8 +145,11 @@ var StateManager = (function(window, document, undefined) {
      * @param  {Object} handler callback functions
      * @return {MediaQuery}     MediaQuery object
      */
-    QueryHandler.prototype.register = function(mq, handler) {
-        var query = new MediaQuery(mq, handler, this.context);
+    QueryHandler.prototype.register = function(mq, matchHandler, unmatchHandler) {
+        var query = new MediaQuery(mq, {
+            match: matchHandler,
+            unmatch: unmatchHandler
+        }, this.context);
         this.queries.push(query);
         return query;
     };
