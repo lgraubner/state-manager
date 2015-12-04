@@ -5,7 +5,6 @@ var concat = require("gulp-concat");
 var jshint = require("gulp-jshint");
 var rename = require("gulp-rename");
 var mochaPhantomjs = require("gulp-mocha-phantomjs");
-var runSequence = require("run-sequence");
 var pkg = require("./package.json");
 
 var pluginName = pkg.name.replace(/-/g, ".");
@@ -17,7 +16,7 @@ var banner = ["/**",
     " */",
 ""].join("\n");
 
-gulp.task("js", function() {
+gulp.task("build", ["lint"], function() {
 
     gulp.src(["src/matchMedia.js", "src/" + pluginName + ".js"])
         .pipe(concat(pluginName + "-polyfill.min.js"))
@@ -46,8 +45,4 @@ gulp.task("test", function() {
         }));
 });
 
-gulp.task("build", ["js"]);
-
-gulp.task("default", function(callback) {
-    runSequence(["lint"], ["js"], ["test"], callback);
-});
+gulp.task("default", ["build", "test"]);
