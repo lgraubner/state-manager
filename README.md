@@ -23,7 +23,7 @@ To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.
 
 ## Usage
 
-** Classic **
+**Classic**
 
 Include `StateManager.min.js` before the closing `body` tag.
 
@@ -31,7 +31,7 @@ Include `StateManager.min.js` before the closing `body` tag.
 <script src="path/to/StateManager.min.js"></script>
 ```
 
-** CommonJS **
+**CommonJS**
 
 ```JavaScript
 var StateManager = require("path/to/StateManager.min.js");
