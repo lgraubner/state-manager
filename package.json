@@ -1,6 +1,6 @@
 {
-  "name": "StateManager",
-  "version": "4.0.0",
+  "name": "state-manager",
+  "version": "4.1.0",
   "description": "Javascript handling for mediaquery breakpoints.",
   "author": {
     "name": "Lars Graubner",

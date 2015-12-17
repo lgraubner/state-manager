@@ -7,7 +7,7 @@ var rename = require("gulp-rename");
 var mochaPhantomjs = require("gulp-mocha-phantomjs");
 var pkg = require("./package.json");
 
-var pluginName = pkg.name.replace(/-/g, ".");
+var pluginName = "StateManager";
 
 var banner = ["/**",
     " * <%= pkg.name %> v<%= pkg.version %> - <%= pkg.description %>",
@@ -17,23 +17,15 @@ var banner = ["/**",
 ""].join("\n");
 
 gulp.task("build", ["lint"], function() {
-
-    gulp.src(["src/matchMedia.js", "src/" + pluginName + ".js"])
-        .pipe(concat(pluginName + "-polyfill.min.js"))
-        .pipe(uglify())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest("dist/"));
-
     return gulp.src("src/" + pluginName + ".js")
         .pipe(rename({ suffix: ".min" }))
         .pipe(uglify())
         .pipe(header(banner, { pkg: pkg }))
         .pipe(gulp.dest("dist/"));
-
 });
 
 gulp.task("lint", function() {
-    return gulp.src("src/StateManager.js")
+    return gulp.src("src/" + pluginName + ".js")
         .pipe(jshint())
         .pipe(jshint.reporter("jshint-stylish"));
 });
