@@ -14,7 +14,7 @@
     "state-manager",
     "media",
     "mediaquery",
-    "browser"
+    "ecosystem:browser"
   ],
   "main": "dist/StateManager.min.js",
   "repository": {
