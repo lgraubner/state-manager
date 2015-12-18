@@ -10,7 +10,7 @@ var pkg = require("./package.json");
 var pluginName = "StateManager";
 
 var banner = ["/**",
-    " * <%= pkg.name %> v<%= pkg.version %> - <%= pkg.description %>",
+    " * " + pluginName + " v<%= pkg.version %> - <%= pkg.description %>",
     " * Copyright " + new Date().getFullYear() + " <%= pkg.author.name %> - <%= pkg.homepage %>",
     " * License: <%= pkg.license %>",
     " */",
