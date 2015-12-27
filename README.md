@@ -23,18 +23,24 @@ To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.
 
 ## Usage
 
+Install it via NPM or download source.
+
+```Bash
+npm install responsive-state-manager --save
+```
+
 **Classic**
 
 Include `StateManager.min.js` before the closing `body` tag.
 
 ```HTML
-<script src="path/to/StateManager.min.js"></script>
+<script src="node_modules/responsive-state-manager/dist/StateManager.min.js"></script>
 ```
 
 **CommonJS**
 
 ```JavaScript
-var StateManager = require("path/to/StateManager.min.js");
+var StateManager = require("responsive-state-manager");
 ```
 
 ### Basic
