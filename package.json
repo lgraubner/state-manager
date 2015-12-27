@@ -1,6 +1,6 @@
 {
   "name": "responsive-state-manager",
-  "version": "4.1.0",
+  "version": "4.1.1",
   "description": "Javascript handling for mediaquery breakpoints.",
   "author": {
     "name": "Lars Graubner",

@@ -1,6 +1,6 @@
 # StateManager
 
-[![Travis](https://img.shields.io/travis/lgraubner/state-manager.svg)](https://travis-ci.org/lgraubner/state-manager) [![David Dev](https://img.shields.io/david/dev/lgraubner/state-manager.svg)](https://david-dm.org/lgraubner/state-manager#info=devDependencies)
+[![Travis](https://img.shields.io/travis/lgraubner/state-manager.svg)](https://travis-ci.org/lgraubner/state-manager) [![David Dev](https://img.shields.io/david/dev/lgraubner/state-manager.svg)](https://david-dm.org/lgraubner/state-manager#info=devDependencies) [![npm](https://img.shields.io/npm/v/responsive-state-manager.svg)](https://www.npmjs.com/package/responsive-state-manager)
 
 > Javascript handling for mediaquery breakpoints.
 
