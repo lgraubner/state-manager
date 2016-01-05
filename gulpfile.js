@@ -1,40 +1,39 @@
-var gulp = require("gulp");
-var uglify = require("gulp-uglify");
-var header = require("gulp-header");
-var concat = require("gulp-concat");
-var jshint = require("gulp-jshint");
-var rename = require("gulp-rename");
-var mochaPhantomjs = require("gulp-mocha-phantomjs");
-var pkg = require("./package.json");
+const gulp = require('gulp');
+const uglify = require('gulp-uglify');
+const header = require('gulp-header');
+const rename = require('gulp-rename');
+const eslint = require('gulp-eslint');
+const mochaPhantomjs = require('gulp-mocha-phantomjs');
+const pkg = require('./package.json');
 
-var pluginName = "StateManager";
+const pluginName = 'StateManager';
 
-var banner = ["/**",
-    " * " + pluginName + " v<%= pkg.version %> - <%= pkg.description %>",
-    " * Copyright " + new Date().getFullYear() + " <%= pkg.author.name %> - <%= pkg.homepage %>",
-    " * License: <%= pkg.license %>",
-    " */",
-""].join("\n");
+const banner = `/**
+ * ${pluginName} v<%= pkg.version %> - <%= pkg.description %>
+ * Copyright ${new Date().getFullYear()} <%= pkg.author.name %> - <%= pkg.homepage %>
+ * License: <%= pkg.license %>
+ */\n`;
 
-gulp.task("build", ["lint"], function() {
-    return gulp.src("src/" + pluginName + ".js")
-        .pipe(rename({ suffix: ".min" }))
-        .pipe(uglify())
-        .pipe(header(banner, { pkg: pkg }))
-        .pipe(gulp.dest("dist/"));
+gulp.task('build', ['lint'], () => {
+  return gulp.src(`src/${pluginName}.js`)
+    .pipe(uglify())
+    .pipe(header(banner, { pkg: pkg }))
+    .pipe(rename({ suffix: '.min' }))
+    .pipe(gulp.dest('dist/'));
 });
 
-gulp.task("lint", function() {
-    return gulp.src("src/" + pluginName + ".js")
-        .pipe(jshint())
-        .pipe(jshint.reporter("jshint-stylish"));
+gulp.task('lint', () => {
+  return gulp.src(`src/${pluginName}.js`)
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
-gulp.task("test", function() {
-    return gulp.src("test/runner.html")
-        .pipe(mochaPhantomjs({
-            reporter: "spec"
-        }));
+gulp.task('test', () => {
+  return gulp.src('test/runner.html')
+    .pipe(mochaPhantomjs({
+      reporter: 'spec',
+    }));
 });
 
-gulp.task("default", ["build", "test"]);
+gulp.task('default', ['build', 'test']);

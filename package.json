@@ -26,16 +26,18 @@
   },
   "devDependencies": {
     "chai": "^3.4.1",
+    "eslint": "^1.10.3",
+    "eslint-config-airbnb": "^3.0.0",
     "gulp": "^3.9.0",
-    "gulp-concat": "^2.6.0",
+    "gulp-eslint": "^1.1.1",
     "gulp-header": "^1.7.1",
-    "gulp-jshint": "^2.0.0",
     "gulp-mocha-phantomjs": "^0.10.1",
     "gulp-rename": "^1.2.2",
     "gulp-uglify": "^1.5.1",
-    "jshint": "^2.8.0",
-    "jshint-stylish": "^2.1.0",
     "mocha": "^2.3.4"
+  },
+  "engines": {
+    "node": ">=4.0.0"
   },
   "license": "MIT",
   "scripts": {
