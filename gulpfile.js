@@ -17,7 +17,7 @@ const banner = `/**
 gulp.task('build', ['lint'], () => {
   return gulp.src(`src/${pluginName}.js`)
     .pipe(uglify())
-    .pipe(header(banner, { pkg: pkg }))
+    .pipe(header(banner, { pkg }))
     .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('dist/'));
 });
