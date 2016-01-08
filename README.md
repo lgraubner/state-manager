@@ -23,7 +23,7 @@ To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.
 
 ## Usage
 
-Install it via NPM or download source.
+Install it via npm or download source.
 
 ```Bash
 npm install responsive-state-manager --save
@@ -99,7 +99,7 @@ var handler = sm.register("screen and (max-width: 768px)", [
 ]);
 ```
 
-You can also check for states beside the handlers. Each handler exposes a `matches` property which is `true` or `false`, depending of the mediaquery.
+You can also check for states beside the handlers. Each handler exposes a `matches` property which is `true` or `false`, depending on the mediaquery.
 
 ```JavaScript
 var mobile = sm.register("screen and (max-width: 768px)"); // handlers are optional
