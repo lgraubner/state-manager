@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 4.1.1
+ * @version 4.1.2
  */
 
 (function (root, factory) {
@@ -66,6 +66,8 @@
       this.matches = this.matchMedia.matches;
 
       this.listenerFunction = function (mql) {
+        self.matches = mql.matches;
+
         if (mql.matches) {
           self.matchCallback();
         } else {
