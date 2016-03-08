@@ -29,7 +29,7 @@ gulp.task('lint', () => {
     .pipe(eslint.failAfterError());
 });
 
-gulp.task('test', () => {
+gulp.task('test', ['lint'], () => {
   return gulp.src('test/runner.html')
     .pipe(mochaPhantomjs({
       reporter: 'spec',

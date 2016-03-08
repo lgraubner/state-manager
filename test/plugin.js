@@ -31,6 +31,27 @@ describe('StateManager', function () {
         sm.register('screen and (max-width: 768px)', noop);
         expect(sm.queries.length).not.to.be.empty;
       });
+
+      it('should throw an error if first argument type is wrong', function () {
+        function proxy() {
+          sm.register(42, noop);
+        }
+        expect(proxy).to.throw(TypeError);
+      });
+
+      it('should throw an error if second argument type is wrong', function () {
+        function proxy() {
+          sm.register('screen and (max-width: 768px)', 42);
+        }
+        expect(proxy).to.throw(TypeError);
+      });
+
+      it('should throw an error if third argument type is wrong', function () {
+        function proxy() {
+          sm.register('screen and (max-width: 768px)', noop, 42);
+        }
+        expect(proxy).to.throw(TypeError);
+      });
     });
 
     describe('#deregister', function () {

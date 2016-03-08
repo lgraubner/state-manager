@@ -2,7 +2,7 @@
  * Javascript handling for mediaquery breakpoints.
  *
  * @author Lars Graubner <mail@larsgraubner.de>
- * @version 4.1.2
+ * @version 4.2.0
  */
 
 (function (root, factory) {
@@ -44,7 +44,7 @@
      * @param  {Object}  obj object to check
      * @return {Boolean}
      */
-    function isfunction(obj) {
+    function isFunction(obj) {
       return !!(obj && obj.constructor && obj.call && obj.apply);
     }
 
@@ -88,13 +88,13 @@
       var handler = this.handler;
       var self = this;
 
-      if (isfunction(handler.match)) {
+      if (isFunction(handler.match)) {
         handler.match.apply(this.context);
       }
 
       if (isArray(handler.match)) {
         each(handler.match, function (func) {
-          if (isfunction(func)) {
+          if (isFunction(func)) {
             func.apply(self.context);
           }
         });
@@ -108,13 +108,13 @@
       var handler = this.handler;
       var self = this;
 
-      if (isfunction(handler.unmatch)) {
+      if (isFunction(handler.unmatch)) {
         handler.unmatch.apply(this.context);
       }
 
       if (isArray(handler.unmatch)) {
         each(handler.unmatch, function (func) {
-          if (isfunction(func)) {
+          if (isFunction(func)) {
             func.apply(self.context);
           }
         });
@@ -157,7 +157,21 @@
      * @return {MediaQuery}   MediaQuery object
      */
     QueryHandler.prototype.register = function (mq, matchHandler, unmatchHandler) {
-      var query = new MediaQuery(mq, {
+      var query;
+
+      if (typeof mq !== 'string') {
+        throw new TypeError('First argument should be a string.');
+      }
+
+      if (!isArray(matchHandler) && !isFunction(matchHandler)) {
+        throw new TypeError('Second argument should be a function or an array of functions.');
+      }
+
+      if (unmatchHandler !== undefined && !isArray(unmatchHandler) && !isFunction(unmatchHandler)) {
+        throw new TypeError('Third argument should be a function or an array of functions.');
+      }
+
+      query = new MediaQuery(mq, {
         match: matchHandler,
         unmatch: unmatchHandler,
       }, this.context);
@@ -194,5 +208,5 @@
     };
 
     return QueryHandler;
-  })(window);
+  }(window));
 }));
