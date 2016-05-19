@@ -4,7 +4,7 @@
 
 > Javascript handling for mediaquery breakpoints.
 
-The StateManager plugin handles mediaqueries and executes javascript on match/unmatch. This plugin is inspired by enquire.js, but cut down on basic functionality and slightly different handling of callbacks (e.g. executing callback on register if mediaquery matches).
+This small library is a wrapper for `matchMedia` and `matchMedia.listen` to easily deal with Media Queries in Javascript.
 
 ## Dependencies
 
@@ -12,7 +12,7 @@ None.
 
 ## Supported Browsers
 
-StateManager relies on `window.matchMedia` for mediaquery checks which is supported by the following browsers:
+StateManager relies on `window.matchMedia` for Media Query checks which is supported by the following browsers:
 
 * Chrome 10+
 * Firefox 6+
@@ -21,9 +21,9 @@ StateManager relies on `window.matchMedia` for mediaquery checks which is suppor
 
 To support legacy browsers a [polyfill](https://github.com/paulirish/matchMedia.js) is required.
 
-## Usage
+## Installation
 
-Install it via npm or download source.
+Install it via npm or download the source directly.
 
 ```Bash
 npm install responsive-state-manager --save
@@ -43,66 +43,40 @@ Include `StateManager.min.js` before the closing `body` tag.
 var StateManager = require("responsive-state-manager");
 ```
 
-### Basic
+## Usage
 
-Initialize:
+Initialize it:
 
 ```JavaScript
 var sm = new StateManager();
 ```
 
-Add states:
+### `.register()`
+
+Registers a listener for a Media Query. The callback function is triggered every time the breakpoint is passed and the state changes. The suplied argument is `true` or `false` depending on whether the Media Query matches.
+It returns a reference to the Listener Object.
 
 ```JavaScript
-var handler = sm.register("screen and (max-width: 768px)", function() {
-    // fires once if device viewport matches
+var handler = sm.register("screen and (max-width: 768px)", function (matches) {
+    // fires every time the state changes
+    console.log(matches); // true if query matches
 });
 ```
 
-remove states:
+### `.deregister()`
+
+Deregisters an attached listener. Accepts a reference to a listener Object.
 
 ```JavaScript
 sm.deregister(handler);
 ```
 
-### Advanced
+### `.matches()`
 
-If your callback function depends on a specific context pass it on initialization:
-
-```JavaScript
-var context = {
-    ...
-
-    foo: function() {
-
-    }
-}
-
-var sm = new StateManager(context);
-```
-
-To register callbacks for unmatching mediaqueries use the following declaration:
+You can also check directly if a media query matches.
 
 ```JavaScript
-var handler = sm.register("screen and (max-width: 768px)", function matchHandler() { ... }, function unmatchHandler() { ... });
-```
+var mobile = sm.matches("screen and (max-width: 768px)"); // does not attach listener
 
-In some cases you might need multiple callback functions. Therefore register arrays of functions:
-
-```JavaScript
-var handler = sm.register("screen and (max-width: 768px)", [
-    function() { ... },
-    function() { ... }
-],
-[
-    function() { ... }
-]);
-```
-
-You can also check for states beside the handlers. Each handler exposes a `matches` property which is `true` or `false`, depending on the mediaquery.
-
-```JavaScript
-var mobile = sm.register("screen and (max-width: 768px)"); // handlers are optional
-
-console.log(mobile.matches); // true/false
+console.log(mobile); // true/false
 ```

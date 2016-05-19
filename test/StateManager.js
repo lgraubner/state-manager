@@ -7,13 +7,6 @@ describe('StateManager', function () {
   var sm;
   var noop = function () {};
   describe('QueryHandler', function () {
-    describe('Object', function () {
-      it('should have a context', function () {
-        sm = new StateManager(window);
-        expect(sm.context).to.be.not.empty;
-        sm.destroy();
-      });
-    });
     describe('#register', function () {
       before(function () {
         sm = new StateManager();
@@ -45,13 +38,6 @@ describe('StateManager', function () {
         }
         expect(proxy).to.throw(TypeError);
       });
-
-      it('should throw an error if third argument type is wrong', function () {
-        function proxy() {
-          sm.register('screen and (max-width: 768px)', noop, 42);
-        }
-        expect(proxy).to.throw(TypeError);
-      });
     });
 
     describe('#deregister', function () {
@@ -74,6 +60,24 @@ describe('StateManager', function () {
       });
     });
 
+    describe('#matches', function () {
+      before(function () {
+        sm = new StateManager();
+      });
+
+      after(function () {
+        sm.destroy();
+      });
+
+      it('should be a function', function () {
+        expect(sm.matches).to.exist;
+      });
+
+      it('should return a boolean', function () {
+        expect(sm.matches('screen and (max-width: 992px)')).to.be.oneOf([true, false]);
+      });
+    });
+
     describe('#destroy', function () {
       before(function () {
         sm = new StateManager();
@@ -87,11 +91,6 @@ describe('StateManager', function () {
         expect(sm.register).to.exist;
       });
 
-      it('should remove context reference', function () {
-        sm.destroy();
-        expect(sm.context).to.be.undefined;
-      });
-
       it('should remove all MediaQuery instances', function () {
         expect(sm.queries).to.be.empty;
       });
@@ -103,7 +102,7 @@ describe('StateManager', function () {
 
     before(function () {
       sm = new StateManager();
-      query = sm.register('screen and (max-width: 768px)', noop, noop);
+      query = sm.register('screen and (max-width: 768px)', noop);
     });
 
     after(function () {
@@ -111,19 +110,9 @@ describe('StateManager', function () {
     });
 
     describe('Object', function () {
-      it('should inherit context', function () {
-        expect(query.context).to.exist;
-        expect(query.context).to.equal(sm.context);
-      });
-
-      it('should have a given match handler', function () {
-        expect(query.handler.match).to.exist;
-        expect(query.handler.match).to.equal(noop);
-      });
-
-      it('should have a given unmatch handler', function () {
-        expect(query.handler.unmatch).to.exist;
-        expect(query.handler.unmatch).to.equal(noop);
+      it('should have use specified callback handler', function () {
+        expect(query.handler).to.exist;
+        expect(query.handler).to.equal(noop);
       });
 
       it('should have a listener function', function () {
