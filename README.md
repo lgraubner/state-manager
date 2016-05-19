@@ -53,13 +53,17 @@ var sm = new StateManager();
 
 ### `.register()`
 
-Registers a listener for a Media Query. The callback function is triggered every time the breakpoint is passed and the state changes. The suplied argument is `true` or `false` depending on whether the Media Query matches.
+Registers a listener for a Media Query. The callback function is triggered every time the breakpoint is passed and the state changes. Additionally the callback is triggered when the Listener gets registered. The suplied argument is `true` or `false` depending on whether the Media Query matches.
 It returns a reference to the Listener Object.
 
 ```JavaScript
 var handler = sm.register("screen and (max-width: 768px)", function (matches) {
-    // fires every time the state changes
-    console.log(matches); // true if query matches
+    // fires on register and every time the state changes
+    if (matches) {
+        // Media Query matches
+    } else {
+        // Media Query doesn't match
+    }
 });
 ```
 
