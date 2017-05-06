@@ -1,3 +1,7 @@
+___
+🚧 DEPRECATED - This repository is deprecated in favor of [mqr](https://github.com/lgraubner/mqr) and will not be updated anymore. Use at your own risk.
+___
+
 # StateManager
 
 [![Travis](https://img.shields.io/travis/lgraubner/state-manager.svg)](https://travis-ci.org/lgraubner/state-manager) [![David Dev](https://img.shields.io/david/dev/lgraubner/state-manager.svg)](https://david-dm.org/lgraubner/state-manager#info=devDependencies) [![npm](https://img.shields.io/npm/v/responsive-state-manager.svg)](https://www.npmjs.com/package/responsive-state-manager)
